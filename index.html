@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  
+  <title>Frontend Mentor | Contact form</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  
+  <div class="after-message-sent message">
+    <div>
+      <img src="assets/images/icon-success-check.svg" alt="check">
+      <span>Message Sent!</span>
+    </div>
+    <p>Thanks for completing the form. We'll be in touch soon!</p>
+  </div>
+
+  <div class="form-container">
+    <h1>Contact Us</h1>
+    <form class="form">
+     <div class="names">
+       <div class="form-group">
+         <label for="">Last name <span class="label-name"></span></label>
+         <input type="text" id="last-name" aria-required="true" required>
+         <span class="error message">This field is required</span>
+       </div>
+       <div class="form-group">
+         <label for="">First name <span class="label-name"></span></label>
+         <input type="text" id="first-name" aria-required="true" required>
+         <span class="error message">This field is required</span>
+       </div>
+     </div>
+      <div class="form-group">
+        <label for="">Email address <span class="label-name"></span></label>
+        <input type="email" id="email" aria-required="true" required>
+        <span class="email error message">Please enter a valid email address</span>
+        <span class="error message">This field is required</span>
+      </div>
+      <div class="form-group-question">
+        <label for="query">Query Type <span class="label-name"></span></label>
+        <div id="query">
+          <div class="query-type">
+            <input type="radio" name="query-type" id="general-enquiry" value="general-enquiry" aria-required="true" required>
+            <label for="general-enquiry">General Enquiries</label>
+          </div>
+          <div class="query-type">
+            <input type="radio" name="query-type" id="support-request" value="support-request" aria-required="true" required>
+            <label for="support-request">Support Requests</label>
+          </div>
+        </div>
+        <span class="error message">Please select a query type</span>
+      </div>
+      <div class="form-group">
+        <label for="Message">Leave Message <span class="label-name"></span></label>
+        <textarea name="" id="message" rows="4" aria-required="true"></textarea>
+        <span class="error message">This field is required</span>
+      </div>
+      <div class="form-group-checkbox">
+        <input type="checkbox" id="consent" aria-required="true" required>
+        <label for="consent">I consent to being contacted by the team <span ></span></label>
+        <span class="error message">To submit this form, please consent to being contacted</span>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+
+  
+
+
+  </div>
+
+
+
+  <!--Contact Us
+
+  First Name
+  This field is required
+
+  Last Name
+  This field is required
+
+  Email Address
+  Please enter a valid email address
+  This field is required
+
+  Query Type
+  General Enquiry
+  Support Request
+  Please select a query type
+
+  Message
+  This field is required
+
+  I consent to being contacted by the team
+  To submit this form, please consent to being contacted
+
+  Submit
+
+  Message Sent!
+  Thanks for completing the form. We'll be in touch soon!-->
+  
+  <script src="script.js"></script>
+</body>
+</html>
