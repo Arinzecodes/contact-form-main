@@ -19,7 +19,7 @@
 
  body {
     font-family: 'Karla', sans-serif;
-    background-image: url('assets/images/IMG_2798.JPG');
+    background-color: aquamarine;
     display: flex;
     justify-content: center;
     align-items: center;
