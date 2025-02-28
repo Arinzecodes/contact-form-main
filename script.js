@@ -4,7 +4,6 @@ const formElement = document.querySelector("form");
 const toast = document.querySelector(".after-message-sent");
 let formValid = true;
 
-
 formElement.setAttribute("novalidate", "");
 
 // Functions
@@ -20,133 +19,126 @@ const changeRadioBg = () => {
   });
 };
 
-
-
-const displayError = (formGroup, error) => {
-    const errorMessage = formGroup.querySelector(error);
+const displayError = (formGroup, errorClass) => {
+  const errorMessage = formGroup.querySelector(errorClass);
+  if (errorMessage) {
     errorMessage.classList.remove("message");
-  };
+  }
+};
 
 const removeError = (formGroup) => {
-    const errorMessage = formGroup.querySelectorAll(".error");
-    errorMessage.forEach(error => {
-      error.classList.add("message");
-    })
-  };
+  const errorMessages = formGroup.querySelectorAll(".error");
+  errorMessages.forEach(error => {
+    error.classList.add("message");
+  });
+};
+
+const validateGroup = formGroup => {
+  const input = formGroup.querySelector("input, textarea");
+  if (!input) return;
   
-  const validateGroup = formGroup => {
-    const inputType = formGroup.querySelector("input, textarea").type || "text";
-  
-    switch (inputType) {
-      case "radio":
-        let checked = false;
-        const radioInputs = formGroup.querySelectorAll("input");
-  
-        radioInputs.forEach(input => {
-          if (input.checked) {
-            checked = true;
-          }
-        });
-        if (!checked) {
-          displayError(formGroup, ".error");
-          formValid = false;
-        }
-        break;
-      case "checkbox":
-        const checkInput = formGroup.querySelector("input");
-  
-        if (!checkInput.checked) {
-          displayError(formGroup, ".error");
-          formValid = false;
-        }
-        break;
-      case "text":
-        const textInput = formGroup.querySelector("input");
-        if (textInput.value.trim() === "") {
-          displayError(formGroup, ".error");
-          formValid = false;
-        }
-        break;
-      case "textarea":
-        const textareaInput = formGroup.querySelector("textarea");
-  
-        if (textareaInput.value.trim() === "") {
-          displayError(formGroup, ".error");
-          formValid = false;
-        }
-        break;
-      case "email":
-        const emailInput = formGroup.querySelector("input");
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  
-        if (emailInput.value.trim() === "") {
-          displayError(formGroup, ".empty");
-          formValid = false;
-        } else if (!emailPattern.test(emailInput.value)) {
-          displayError(formGroup, ".valid");
-          formValid = false;
-        }
-        break;
-      default:
-        break;
-    }
-  };
-  
-  const displayToast = () => {
-    setTimeout(() => {
-      toast.classList.remove("message");
-    }, 10);
-    setTimeout(() => {
-      toast.classList.add("message");
-    }, 4000);
+  const inputType = input.type || "text";
+
+  switch (inputType) {
+    case "radio":
+      let checked = false;
+      const radioInputs = formGroup.querySelectorAll("input");
+      radioInputs.forEach(input => {
+        if (input.checked) checked = true;
+      });
+      if (!checked) {
+        displayError(formGroup, ".error");
+        formValid = false;
+      }
+      break;
+      
+    case "checkbox":
+      if (!input.checked) {
+        displayError(formGroup, ".error");
+        formValid = false;
+      }
+      break;
+      
+    case "text":
+    case "textarea":
+      if (input.value.trim() === "") {
+        displayError(formGroup, ".error");
+        formValid = false;
+      }
+      break;
+      
+    case "email":
+      const emailInput = formGroup.querySelector("input[type='email']");
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      
+      if (emailInput.value.trim() === "") {
+        displayError(formGroup, ".error:not(.email)");
+        formValid = false;
+      } else if (!emailPattern.test(emailInput.value)) {
+        displayError(formGroup, ".email.error");
+        formValid = false;
+      }
+      break;
+
+    default:
+      break;
   }
-  
-  // Event listeners
-  
-  document.addEventListener('DOMContentLoaded', () => {
-    if (localStorage.getItem('showAfter-message-sent') === 'true') {
-        displayToast();
-  
-        localStorage.removeItem('showAfter-message-sent');
-    }
+};
+
+const displayToast = () => {
+  setTimeout(() => {
+    toast.classList.remove("message");
+  }, 10);
+  setTimeout(() => {
+    toast.classList.add("message");
+  }, 4000);
+};
+
+// Event listeners
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('showAfter-message-sent') === 'true') {
+    displayToast();
+    localStorage.removeItem('showAfter-message-sent');
+  }
+});
+
+radioDivs.forEach(radioDiv => {
+  radioDiv.addEventListener("click", () => {
+    const radioInput = radioDiv.querySelector("input");
+    radioInput.checked = true;
+    changeRadioBg();
+    removeError(radioDiv.parentElement.parentElement);
   });
-  
-  radioDivs.forEach(radioDiv => {
-    radioDiv.addEventListener("click", () => {
-      const radioInput = radioDiv.querySelector("input");
-      radioInput.checked = true;
-      changeRadioBg();
-      removeError(radioDiv.parentElement.parentElement);
+});
+
+formElement.addEventListener("submit", event => {
+  event.preventDefault();
+  formValid = true;
+
+  formGroups.forEach(formGroup => {
+    validateGroup(formGroup);
+  });
+
+  if (formValid) {
+    localStorage.setItem('showAfter-message-sent', 'true');
+    formElement.submit();
+  }
+});
+
+formGroups.forEach(formGroup => {
+  const inputs = formGroup.querySelectorAll("input, textarea");
+  inputs.forEach(input => {
+    input.addEventListener("input", () => {
+      removeError(formGroup);
     });
-  });
-  
-  formElement.addEventListener("submit", event => {
-    event.preventDefault();
-  
-    formValid = true;
-  
-    formGroups.forEach(formGroup => {
+
+    input.addEventListener("blur", () => {
       validateGroup(formGroup);
     });
-    if (formValid) {
-      localStorage.setItem('showAfter-message-sent', 'true');
-      formElement.submit();
-    }
   });
-  
-  formGroups.forEach(formGroup => {
-    const inputs = formGroup.querySelectorAll("input, textarea");
-    inputs.forEach(input => {
-      input.addEventListener("click", () => {
-        removeError(formGroup);
-      });
-  
-      input.addEventListener("blur", () => {
-        validateGroup(formGroup);
-      });
-    });
-  });
-  
-  toast.addEventListener("click", () => {
-    toast.classList.add("message");
-  });
+});
+
+toast.addEventListener("click", () => {
+  toast.classList.add("message");
+});
